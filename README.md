@@ -1,14 +1,6 @@
 # TP 9 — Authentification en mémoire avec Spring Security
 
-Portail RH sécurisé de l'USMBA : une application Spring Boot qui présente quatre espaces métier cloisonnés (employé, manager, ressources humaines, administration) et dont l'authentification repose entièrement sur un `InMemoryUserDetailsManager` avec mots de passe hachés en BCrypt.
 
-Ce TP reprend le principe demandé dans l'énoncé — un espace public, des pages protégées par rôle, une page de connexion personnalisée et une déconnexion propre — mais le transpose dans un domaine métier différent et y ajoute un journal d'authentification consultable par l'administrateur.
-
-## Ce que fait l'application
-
-La page d'accueil est publique. Dès qu'un visiteur tente d'ouvrir un espace métier sans être authentifié, Spring Security intercepte la requête et le renvoie vers le formulaire de connexion. Une fois identifié, l'utilisateur est aiguillé automatiquement vers l'espace correspondant à son rôle le plus élevé, et les URL des autres espaces lui répondent par une page 403.
-
-Quatre rôles sont définis : `EMPLOYE`, `MANAGER`, `RH` et `ADMIN`. Ils sont cumulatifs, un compte RH possède donc aussi les droits manager et employé, ce qui évite d'avoir à multiplier les habilitations.
 
 ## Comptes de démonstration
 
@@ -93,27 +85,3 @@ Le compte `admin` voit en plus la liste des comptes réellement déclarés dans 
 
 Page réservée au rôle ADMIN. Chaque connexion acceptée, chaque échec et chaque déconnexion y sont horodatés et conservés dans une file bornée à vingt-cinq entrées. Les échecs enregistrent l'identifiant tel qu'il a été saisi, ce qui permet de repérer les tentatives répétées sur un même compte.
 
-## Choix d'implémentation
-
-Le contrôle d'accès est déclaré dans une `SecurityFilterChain` unique, avec des règles ordonnées du plus spécifique au plus général et un `anyRequest().authenticated()` en dernier recours. Les URL de connexion et de déconnexion sont personnalisées, tout comme les noms des champs du formulaire : `identifiant` et `motDePasse` remplacent les `username` et `password` par défaut.
-
-Plutôt qu'un simple `UserDetailsManager` déclaré à la main, les comptes sont décrits dans un annuaire métier (`AnnuaireDemo`) puis convertis en `User` par une fabrique. Les rôles sont attribués de façon cumulative par une correspondance explicite, ce qui garde la hiérarchie lisible.
-
-Le journal d'authentification n'est pas un composant de Spring Security : il est alimenté par deux gestionnaires de succès et d'échec qui décorent les gestionnaires standards, ainsi que par le gestionnaire de succès de déconnexion. C'est ce qui permet d'avoir une trace sans toucher au mécanisme d'authentification lui-même.
-
-La page 403 est une template Thymeleaf déclarée via `accessDeniedPage`, et le nombre de sessions simultanées par compte est limité à deux, avec une redirection explicite en cas d'expiration.
-
-## Personnalisation par rapport à l'énoncé
-
-L'énoncé construit un projet minimal nommé `spring-security-demo` dans le paquetage `ma.fstg.security`, avec deux comptes `user` et `admin` et des pages de démonstration sans contenu. La présente version s'en écarte volontairement :
-
-- le paquetage et l'artefact sont propres au projet (`ma.usmba.portail` et `portail-rh-securise`) ;
-- le domaine est un portail RH réel, avec des demandes de congé, des dossiers de paie et un effectif, plutôt que des pages vides ;
-- quatre comptes et quatre rôles hiérarchisés remplacent les deux comptes de l'énoncé ;
-- les noms des champs du formulaire de connexion sont francisés ;
-- un journal d'authentification persistant en mémoire et une page 403 dédiée ont été ajoutés ;
-- BCrypt est utilisé dès le départ, sans passer par les mots de passe `{noop}` de la version intermédiaire.
-
-## Structure du projet
-
-Le code se répartit en trois paquetages. `modele` contient l'annuaire des comptes, les données métier et le journal. `config` contient la chaîne de filtres, la fabrique de `UserDetailsService` et le bean `PasswordEncoder`. `web` contient les contrôleurs d'accueil et d'espaces. Les vues Thymeleaf sont dans `src/main/resources/templates`, avec des fragments partagés pour l'en-tête et le pied de page, et la feuille de style dans `static/css`.
