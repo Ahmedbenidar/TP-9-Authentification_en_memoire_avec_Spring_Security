@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: tete('Accès refusé')}"></head>
+<body>
+<div th:replace="~{fragments/commun :: barre}"></div>
+
+<main class="contenu">
+	<div class="carte refus">
+		<p class="code">403</p>
+		<h1>Accès refusé</h1>
+		<p style="color:var(--encre-douce)">
+			Votre compte est bien authentifié, mais son rôle ne lui permet pas
+			d'ouvrir cette page. Le contrôle d'accès de Spring Security a bloqué
+			la requête avant même d'atteindre le contrôleur.
+		</p>
+		<div class="boutons" style="justify-content:center">
+			<a class="bouton bouton--plein" th:href="@{/mon-espace}">Retour à mon espace</a>
+			<a class="bouton bouton--contour" th:href="@{/}">Page d'accueil</a>
+		</div>
+	</div>
+</main>
+
+<div th:replace="~{fragments/commun :: pied}"></div>
+</body>
+</html>

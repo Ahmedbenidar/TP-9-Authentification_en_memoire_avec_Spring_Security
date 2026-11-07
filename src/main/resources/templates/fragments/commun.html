@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="tete(titre)">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title th:text="${titre} + ' — Portail RH USMBA'">Portail RH USMBA</title>
+	<link rel="stylesheet" th:href="@{/css/portail.css}">
+</head>
+<body>
+
+<header th:fragment="barre" class="barre">
+	<div class="barre__marque">
+		<span class="barre__logo">RH</span>
+		<div>
+			<strong>Portail RH</strong>
+			<small>Université Sidi Mohamed Ben Abdellah</small>
+		</div>
+	</div>
+	<nav class="barre__liens">
+		<a th:href="@{/mon-espace}">Mon espace</a>
+		<a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+		   th:href="@{/journal/connexions}">Journal</a>
+		<a th:if="${#authorization.expression('isAnonymous()')}"
+		   th:href="@{/connexion}">Se connecter</a>
+		<form th:unless="${#authorization.expression('isAnonymous()')}"
+		      th:action="@{/deconnexion}" method="post" class="barre__sortie">
+			<button type="submit">Se déconnecter</button>
+		</form>
+	</nav>
+</header>
+
+<footer th:fragment="pied" class="pied">
+	<p>TP 9 — Authentification en mémoire avec Spring Security</p>
+	<p>Développement JakartaEE : Spring · comptes de démonstration uniquement</p>
+</footer>
+
+</body>
+</html>

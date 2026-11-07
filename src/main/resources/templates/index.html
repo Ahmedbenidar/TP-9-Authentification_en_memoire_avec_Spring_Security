@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: tete('Accueil')}"></head>
+<body>
+<div th:replace="~{fragments/commun :: barre}"></div>
+
+<main class="contenu">
+	<div class="message message--info" th:if="${param.deconnecte}">
+		Vous avez été déconnecté. Votre session a été invalidée et le cookie JSESSIONID supprimé.
+	</div>
+
+	<section class="hero">
+		<div>
+			<span class="hero__surtitre">Espace public</span>
+			<h1 class="hero__titre">Portail RH de l'USMBA</h1>
+			<p class="hero__texte">
+				Centralisez vos demandes de congé, vos dossiers de paie et vos validations
+				hiérarchiques dans un espace unique. Trois profils cohabitent ici :
+				employé, manager, ressources humaines, sans oublier l'administration.
+			</p>
+
+			<div class="boutons">
+				<a class="bouton bouton--plein" th:href="@{/mon-espace}">Accéder à mon espace</a>
+				<a class="bouton bouton--contour" th:if="${#authorization.expression('isAnonymous()')}"
+				   th:href="@{/connexion}">Se connecter</a>
+			</div>
+
+			<ul class="liste-avantages">
+				<li>Les pages métier sont réservées au rôle correspondant.</li>
+				<li>Les mots de passe sont hachés en BCrypt, jamais stockés en clair.</li>
+				<li>Chaque tentative de connexion est tracée dans le journal.</li>
+			</ul>
+		</div>
+
+		<aside class="carte">
+			<h3>Sécurité en place</h3>
+			<div class="grille grille--3" style="margin-top:14px">
+				<div>
+					<p class="chiffre">4</p>
+					<p class="etiquette">comptes de test</p>
+				</div>
+				<div>
+					<p class="chiffre">4</p>
+					<p class="etiquette">rôles distincts</p>
+				</div>
+				<div>
+					<p class="chiffre">25</p>
+					<p class="etiquette">événements journalisés</p>
+				</div>
+			</div>
+			<div class="encart" style="margin-top:20px">
+				<strong>Authentification en mémoire</strong>
+				Aucune base de données n'est nécessaire : les comptes sont déclarés dans
+				un <code>InMemoryUserDetailsManager</code>, idéal pour un TP.
+			</div>
+		</aside>
+	</section>
+
+	<section class="carte" style="margin-top:26px">
+		<h3>Aiguillage par rôle</h3>
+		<p style="font-size:13.5px;color:var(--encre-douce);margin:0">
+			Une fois authentifié, le portail vous redirige automatiquement vers l'espace
+			correspondant à votre rôle le plus élevé : employé, manager, RH ou administration.
+		</p>
+	</section>
+</main>
+
+<div th:replace="~{fragments/commun :: pied}"></div>
+</body>
+</html>

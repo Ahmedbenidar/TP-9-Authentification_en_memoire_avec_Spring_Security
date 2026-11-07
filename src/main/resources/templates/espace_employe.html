@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: tete('Espace employé')}"></head>
+<body>
+<div th:replace="~{fragments/commun :: barre}"></div>
+
+<main class="contenu">
+	<div class="entete-section">
+		<div>
+			<span class="hero__surtitre">Rôle EMPLOYE</span>
+			<h1>Mon espace collaborateur</h1>
+			<p>Bonjour <strong th:text="${nomComplet}">Sara Benali</strong>, voici vos demandes en cours.</p>
+		</div>
+	</div>
+
+	<div class="pile">
+		<div class="carte">
+			<h3>Mes demandes de congé</h3>
+			<p th:if="${#lists.isEmpty(demandes)}" style="margin:0;color:var(--encre-douce)">
+				Aucune demande enregistrée à votre nom pour le moment.
+			</p>
+			<table class="donnees" th:unless="${#lists.isEmpty(demandes)}">
+				<thead>
+				<tr><th>Référence</th><th>Type</th><th>Du</th><th>Au</th><th>État</th></tr>
+				</thead>
+				<tbody>
+				<tr th:each="d : ${demandes}">
+					<td th:text="${d.reference}">CG-2024-118</td>
+					<td th:text="${d.type}">Annuel</td>
+					<td th:text="${#temporals.format(d.debut, 'dd/MM/yyyy')}">23/12/2024</td>
+					<td th:text="${#temporals.format(d.fin, 'dd/MM/yyyy')}">31/12/2024</td>
+					<td>
+						<span class="badge"
+							  th:classappend="${d.etat == 'Validée'} ? 'badge--ok' : 'badge--attente'"
+							  th:text="${d.etat}">En attente</span>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="encart">
+			<strong>Périmètre de ce profil</strong>
+			Le compte employé ne peut consulter que cet espace. Toute tentative d'ouverture
+			d'une URL <code>/espace/manager</code>, <code>/espace/rh</code> ou
+			<code>/espace/administration</code> renvoie une page 403.
+		</div>
+	</div>
+</main>
+
+<div th:replace="~{fragments/commun :: pied}"></div>
+</body>
+</html>

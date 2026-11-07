@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: tete('Administration')}"></head>
+<body>
+<div th:replace="~{fragments/commun :: barre}"></div>
+
+<main class="contenu">
+	<div class="entete-section">
+		<div>
+			<span class="hero__surtitre">Rôle ADMIN</span>
+			<h1>Administration du portail</h1>
+			<p>Connectée en tant que <strong th:text="${identifiant}">admin</strong>.</p>
+		</div>
+		<a class="bouton bouton--contour" th:href="@{/journal/connexions}">Voir le journal</a>
+	</div>
+
+	<div class="pile">
+		<div class="grille grille--3">
+			<div class="carte">
+				<p class="chiffre" th:text="${effectif}">128</p>
+				<p class="etiquette">collaborateurs</p>
+			</div>
+			<div class="carte">
+				<p class="chiffre" th:text="${#lists.size(comptes)}">4</p>
+				<p class="etiquette">comptes en mémoire</p>
+			</div>
+			<div class="carte">
+				<p class="chiffre">4</p>
+				<p class="etiquette">rôles configurés</p>
+			</div>
+		</div>
+
+		<div class="carte">
+			<h3>Comptes déclarés dans le UserDetailsService</h3>
+			<table class="donnees">
+				<thead>
+				<tr><th>Identifiant</th><th>Nom</th><th>Fonction</th><th>Rôle principal</th></tr>
+				</thead>
+				<tbody>
+				<tr th:each="c : ${comptes}">
+					<td><code th:text="${c.identifiant}">user</code></td>
+					<td th:text="${c.nomComplet}">Sara Benali</td>
+					<td th:text="${c.fonction}">Chargée de dossier</td>
+					<td><span class="badge badge--info" th:text="${c.rolePrincipal}">EMPLOYE</span></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="encart">
+			<strong>Note pédagogique</strong>
+			Le mot de passe affiché sur la page de connexion n'existe en clair que dans la
+			documentation du TP. En mémoire, seul le hash BCrypt est conservé.
+		</div>
+	</div>
+</main>
+
+<div th:replace="~{fragments/commun :: pied}"></div>
+</body>
+</html>

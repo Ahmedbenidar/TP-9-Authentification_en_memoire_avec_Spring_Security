@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: tete('Journal des connexions')}"></head>
+<body>
+<div th:replace="~{fragments/commun :: barre}"></div>
+
+<main class="contenu">
+	<div class="entete-section">
+		<div>
+			<span class="hero__surtitre">Rôle ADMIN</span>
+			<h1>Journal des connexions</h1>
+			<p>Les 25 derniers événements d'authentification de cette instance.</p>
+		</div>
+	</div>
+
+	<div class="pile">
+		<div class="carte" th:if="${#lists.isEmpty(entrees)}">
+			<p style="margin:0;color:var(--encre-douce)">
+				Aucun événement enregistré pour l'instant. Déconnectez-vous puis reconnectez-vous
+				pour alimenter le journal.
+			</p>
+		</div>
+
+		<table class="donnees" th:unless="${#lists.isEmpty(entrees)}">
+			<thead>
+			<tr><th>Horodatage</th><th>Identifiant</th><th>Événement</th></tr>
+			</thead>
+			<tbody>
+			<tr th:each="e : ${entrees}">
+				<td th:text="${e.heure}">07/11/2026 10:12:44</td>
+				<td><code th:text="${e.identifiant}">user</code></td>
+				<td>
+					<span class="badge"
+						  th:classappend="'badge--' + ${e.type.style}"
+						  th:text="${e.type.libelle}">Connexion acceptee</span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</main>
+
+<div th:replace="~{fragments/commun :: pied}"></div>
+</body>
+</html>

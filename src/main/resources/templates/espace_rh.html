@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: tete('Espace RH')}"></head>
+<body>
+<div th:replace="~{fragments/commun :: barre}"></div>
+
+<main class="contenu">
+	<div class="entete-section">
+		<div>
+			<span class="hero__surtitre">Rôle RH</span>
+			<h1>Direction des ressources humaines</h1>
+			<p>Connectée en tant que <strong th:text="${identifiant}">rh</strong>.</p>
+		</div>
+	</div>
+
+	<div class="pile">
+		<div class="grille grille--3">
+			<div class="carte">
+				<p class="chiffre" th:text="${effectif}">128</p>
+				<p class="etiquette">collaborateurs suivis</p>
+			</div>
+			<div class="carte">
+				<p class="chiffre">3</p>
+				<p class="etiquette">dossiers de paie du mois</p>
+			</div>
+			<div class="carte">
+				<p class="chiffre">4</p>
+				<p class="etiquette">entrées à venir</p>
+			</div>
+		</div>
+
+		<div class="carte">
+			<h3>Dossiers de paie</h3>
+			<table class="donnees">
+				<thead>
+				<tr><th>Matricule</th><th>Collaborateur</th><th>Période</th><th>Statut</th></tr>
+				</thead>
+				<tbody>
+				<tr th:each="d : ${dossiers}">
+					<td th:text="${d.matricule}">MAT-0142</td>
+					<td th:text="${d.collaborateur}">Yassine Amrani</td>
+					<td th:text="${d.mois}">Novembre 2024</td>
+					<td>
+						<span class="badge badge--info" th:text="${d.statut}">Clôturé</span>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="encart">
+			<strong>Cloisonnement</strong>
+			Ce compte dispose des rôles RH, MANAGER et EMPLOYE. Le journal des connexions,
+			lui, reste réservé au rôle ADMIN.
+		</div>
+	</div>
+</main>
+
+<div th:replace="~{fragments/commun :: pied}"></div>
+</body>
+</html>

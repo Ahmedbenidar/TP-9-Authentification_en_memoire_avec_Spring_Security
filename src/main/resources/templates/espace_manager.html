@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commun :: tete('Espace manager')}"></head>
+<body>
+<div th:replace="~{fragments/commun :: barre}"></div>
+
+<main class="contenu">
+	<div class="entete-section">
+		<div>
+			<span class="hero__surtitre">Rôle MANAGER</span>
+			<h1>Validation de l'équipe</h1>
+			<p>Connecté en tant que <strong th:text="${identifiant}">manager</strong>.</p>
+		</div>
+	</div>
+
+	<div class="pile">
+		<div class="grille grille--3">
+			<div class="carte">
+				<p class="chiffre" th:text="${enAttente}">2</p>
+				<p class="etiquette">demandes à traiter</p>
+			</div>
+			<div class="carte">
+				<p class="chiffre">7</p>
+				<p class="etiquette">collaborateurs</p>
+			</div>
+			<div class="carte">
+				<p class="chiffre">3</p>
+				<p class="etiquette">absences cette semaine</p>
+			</div>
+		</div>
+
+		<div class="carte">
+			<h3>Demandes de mon équipe</h3>
+			<table class="donnees">
+				<thead>
+				<tr><th>Référence</th><th>Collaborateur</th><th>Type</th><th>Période</th><th>État</th></tr>
+				</thead>
+				<tbody>
+				<tr th:each="d : ${demandes}">
+					<td th:text="${d.reference}">CG-2024-118</td>
+					<td th:text="${d.collaborateur}">Yassine Amrani</td>
+					<td th:text="${d.type}">Annuel</td>
+					<td th:text="${#temporals.format(d.debut, 'dd/MM')} + ' → ' + ${#temporals.format(d.fin, 'dd/MM/yyyy')}">23/12 → 31/12/2024</td>
+					<td>
+						<span class="badge"
+							  th:classappend="${d.etat == 'Validée'} ? 'badge--ok' : 'badge--attente'"
+							  th:text="${d.etat}">En attente</span>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="encart">
+			<strong>Héritage des rôles</strong>
+			Le compte manager possède les rôles MANAGER et EMPLOYE : il accède donc à
+			cet espace et à l'espace collaborateur, mais reste bloqué sur les espaces
+			RH et administration.
+		</div>
+	</div>
+</main>
+
+<div th:replace="~{fragments/commun :: pied}"></div>
+</body>
+</html>
